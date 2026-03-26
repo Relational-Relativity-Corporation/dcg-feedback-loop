@@ -92,6 +92,14 @@ DCG evaluates the closed-loop transformation before execution, rejecting gain/de
 
 ---
 
+## Visual Comparison
+
+![Feedback comparison: stable vs oscillatory vs divergent](analysis/feedback_comparison.png)
+
+Same gain (5.0). Same plant. Same controller. Only delay changes. The spectral radius of the closed-loop matrix crosses 1.0 between delay=2 and delay=3 — the boundary between admissible and non-admissible is invisible without closed-loop analysis.
+
+---
+
 ## Running
 
 ```bash
