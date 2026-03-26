@@ -1,0 +1,37 @@
+# Domain declaration for delayed feedback control system
+#
+# For a feedback loop with proportional gain and sensor delay,
+# domain closure requires that the closed-loop system matrix
+# has spectral radius <= 1.
+#
+# This condition depends on the INTERACTION of gain and delay,
+# not on either parameter alone. A gain that is admissible at
+# delay=0 may be non-admissible at delay=5.
+
+domain: delayed_feedback_control
+
+inputs:
+  gain:
+    bounds: [0, inf]
+    type: float
+    description: "proportional controller gain"
+  delay_steps:
+    bounds: [0, inf]
+    type: int
+    description: "sensor delay in discrete time steps"
+  dt:
+    default: 0.1
+    type: float
+    description: "time step for discretization"
+
+plant:
+  type: first_order_integrator
+  dynamics: "x[n+1] = x[n] + dt * u[n]"
+
+constraint:
+  description: >
+    spectral_radius(A_closed_loop) <= 1, where A_closed_loop is the
+    augmented system matrix encoding gain, delay, and plant dynamics.
+    This is an interaction constraint — it cannot be evaluated from
+    gain or delay independently.
+  formal: "max(|eigenvalues(A_cl)|) <= 1 implies T(D) subset D"
